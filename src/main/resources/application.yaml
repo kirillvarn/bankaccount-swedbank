@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: bankaccount
+  datasource:
+    url: jdbc:h2:file:/data/Apps/Workspace/bankaccount/db
+    username: username
+    password: password
+    driverClassName: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+  h2:
+    console:
+      enabled: true
