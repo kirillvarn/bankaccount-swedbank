@@ -1,32 +1,41 @@
 package io.github.kirillvarn.bankaccount.account;
 
+import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.UUID;
-import jakarta.persistence.*;
 
+import org.hibernate.annotations.CreationTimestamp;
+
+import io.github.kirillvarn.bankaccount.exchange.Exchange;
+import io.github.kirillvarn.bankaccount.user.User;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
+@Table(name="accounts")
 public class Account {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private UUID user_id;
-    private String currency;
-    private double balance;
 
-    public Account(UUID user_id, String currency, double balance) {
-        this.user_id = user_id;
-        this.currency = currency;
-        this.balance = balance;
-    };
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    public double getBalance() {
-        return this.balance;
-    }
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 3)
+    private Exchange.Currency currency;
 
-    public String getCurrency() {
-        return this.currency;
-    }
+    private BigDecimal balance;
 
-    public UUID getUserId() {
-        return this.user_id;
-    }
+    @CreationTimestamp
+    @Column(updatable = false, nullable = false)
+    private Timestamp createdAt;
 }

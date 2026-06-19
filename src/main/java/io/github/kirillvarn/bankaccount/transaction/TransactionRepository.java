@@ -1,6 +1,10 @@
 package io.github.kirillvarn.bankaccount.transaction;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.UUID;
 
-public interface TransactionRepository extends JpaRepository<Transaction, Long> {
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface TransactionRepository extends CrudRepository<Transaction, UUID> {
 }

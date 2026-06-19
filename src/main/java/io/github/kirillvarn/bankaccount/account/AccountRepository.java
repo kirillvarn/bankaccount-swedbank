@@ -1,8 +1,15 @@
 package io.github.kirillvarn.bankaccount.account;
 
+import java.util.Optional;
 import java.util.UUID;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
-public interface AccountRepository extends JpaRepository<Account, UUID> {
+import io.github.kirillvarn.bankaccount.exchange.Exchange;
+
+@Repository
+public interface AccountRepository extends CrudRepository<Account, UUID> {
+    public Optional<Account> findByIdAndUserId(UUID id, UUID userId);
+    public Optional<Account> existsByUserIdAndCurrency(UUID id, Exchange.Currency currency);
 }
