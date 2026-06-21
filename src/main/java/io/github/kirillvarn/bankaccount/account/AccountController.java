@@ -1,7 +1,9 @@
 package io.github.kirillvarn.bankaccount.account;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -26,18 +28,29 @@ public class AccountController {
     @PostMapping
     public AccountDto create(@AuthenticationPrincipal Jwt jwt, @RequestBody AccountDto accountDto) {
         Account acc = mapper.mapFrom(accountDto);
-        UUID userId = UUID.fromString(jwt.getClaim("user_id"));   
+        UUID userId = UUID.fromString(jwt.getClaim("user_id"));
         Account saved = accountService.create(acc, userId);
         return mapper.mapTo(saved);
     }
 
     @GetMapping("/{id}")
     public AccountDto getOne(@AuthenticationPrincipal Jwt jwt, @PathVariable UUID id) {
-        UUID userId = UUID.fromString(jwt.getClaim("user_id"));   
+        UUID userId = UUID.fromString(jwt.getClaim("user_id"));
 
         Account account = accountService.getOne(id, userId);
 
         AccountDto accDto = mapper.mapTo(account);
+
+        return accDto;
+    }
+
+    @GetMapping
+    public List<AccountDto> getAll(@AuthenticationPrincipal Jwt jwt, @PathVariable UUID id) {
+        UUID userId = UUID.fromString(jwt.getClaim("user_id"));
+
+        List<Account> accounts = accountService.getAll(id, userId);
+
+        List<AccountDto> accDto = accounts.stream().map(mapper::mapTo).collect(Collectors.toList());
 
         return accDto;
     }
