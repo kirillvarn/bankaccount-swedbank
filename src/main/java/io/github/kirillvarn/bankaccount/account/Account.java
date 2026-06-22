@@ -2,11 +2,13 @@ package io.github.kirillvarn.bankaccount.account;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.Set;
 import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
 
 import io.github.kirillvarn.bankaccount.exchange.Exchange;
+import io.github.kirillvarn.bankaccount.transaction.Transaction;
 import io.github.kirillvarn.bankaccount.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -19,7 +21,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="accounts")
+@Table(name = "accounts")
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -37,6 +39,9 @@ public class Account {
     private String name;
 
     private BigDecimal balance;
+
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
+    private Set<Transaction> transactions;
 
     @CreationTimestamp
     @Column(updatable = false, nullable = false)

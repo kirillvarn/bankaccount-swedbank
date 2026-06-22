@@ -11,17 +11,24 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import io.github.kirillvarn.bankaccount.Mapper;
+import io.github.kirillvarn.bankaccount.transaction.Transaction;
+import io.github.kirillvarn.bankaccount.transaction.TransactionDto;
+import io.github.kirillvarn.bankaccount.transaction.TransactionService;
 
 @RestController
 @RequestMapping("/api/v1/accounts")
 public class AccountController {
 
     private AccountService accountService;
+    private TransactionService transactionService;
     private Mapper<Account, AccountDto> mapper;
+    private Mapper<Transaction, TransactionDto> transactionMapper;
 
     @Autowired
-    public AccountController(AccountService accountService, Mapper<Account, AccountDto> mapper) {
+    public AccountController(Mapper<Transaction, TransactionDto> transactionMapper, TransactionService transactionService, AccountService accountService, Mapper<Account, AccountDto> mapper) {
         this.accountService = accountService;
+        this.transactionMapper = transactionMapper;
+        this.transactionService = transactionService;
         this.mapper = mapper;
     };
 
@@ -51,6 +58,17 @@ public class AccountController {
         List<Account> accounts = accountService.getAll(userId);
 
         List<AccountDto> accDto = accounts.stream().map(mapper::mapTo).collect(Collectors.toList());
+
+        return accDto;
+    }
+
+    @GetMapping("/{id}/transactions")
+    public List<TransactionDto> getTransaction(@AuthenticationPrincipal Jwt jwt, @PathVariable UUID id) {
+        UUID userId = UUID.fromString(jwt.getClaim("user_id"));
+
+        List<Transaction> accounts = transactionService.getByAccount(userId, id);
+
+        List<TransactionDto> accDto = accounts.stream().map(transactionMapper::mapTo).collect(Collectors.toList());
 
         return accDto;
     }

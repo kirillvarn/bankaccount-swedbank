@@ -22,8 +22,7 @@ CREATE TABLE accounts (
   is_primary BOOLEAN,
   balance DECIMAL(19,4) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id),
-  UNIQUE(user_id, currency)
+  CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 CREATE TABLE account_transactions (
@@ -40,7 +39,21 @@ CREATE TABLE account_transactions (
   CONSTRAINT fk_account FOREIGN KEY (account_id) REFERENCES accounts(id)
 );
 
-CREATE UNIQUE INDEX idx_unique_user_primary ON accounts (user_id, is_primary);
+CREATE UNIQUE INDEX one_primary_per_user
+ON accounts (user_id)
+WHERE is_primary = true;
 
-insert into users (id, username, created_at) values ('123e4567-e89b-12d3-a456-426614174000', 'User 1', now());
-insert into users (id, username, created_at) values ('123e4567-e89b-12d3-a456-426614174001', 'User 2', now());
+-- insert into users (id, username, created_at) values ('123e4567-e89b-12d3-a456-426614174000', 'User 1', now());
+-- insert into users (id, username, created_at) values ('123e4567-e89b-12d3-a456-426614174001', 'User 2', now());
+
+
+-- insert into accounts (id, user_id, currency, balance, name, is_primary) values (uuidv4(), '123e4567-e89b-12d3-a456-426614174000', 'USD', 0.0, 'Secondary acc 1', false);
+-- insert into account_transactions()
+
+-- insert into accounts (id, user_id, currency, balance, name, is_primary) values (uuidv4(), '123e4567-e89b-12d3-a456-426614174000', 'SEK', 0.0, 'Secondary acc 2', false);
+
+
+-- insert into accounts (id, user_id, currency, balance, name, is_primary) values (uuidv4(), '123e4567-e89b-12d3-a456-426614174000', 'USD', 0.0, 'Secondary acc 3', false);
+
+
+-- insert into accounts (id, user_id, currency, balance, name, is_primary) values (uuidv4(), '123e4567-e89b-12d3-a456-426614174000', 'EUR', 0.0, 'Main acc', true);

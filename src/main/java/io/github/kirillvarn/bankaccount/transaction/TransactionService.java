@@ -1,6 +1,7 @@
 package io.github.kirillvarn.bankaccount.transaction;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
 
@@ -34,11 +35,7 @@ public class TransactionService {
         return transactionRepo.save(transaction);
     }
 
-    // public Account getOne(UUID id, UUID userId) {
-    // Account acc = transactionRepo.findByIdAndUserId(id, userId)
-    // .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account
-    // not found"));
-
-    // return acc;
-    // }
+    public List<Transaction> getByAccount(UUID userId, UUID accountId) {
+        return transactionRepo.findByUserIdAndAccountId(userId, accountId);
+    }
 }

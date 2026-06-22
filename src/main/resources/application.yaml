@@ -1,3 +1,9 @@
+app:
+  seed:
+    enabled: false
+    users: 2
+    accountsPerUser: 3
+
 rsa:
   private-key: classpath:certs/private.pem
   public-key: classpath:certs/public.pem

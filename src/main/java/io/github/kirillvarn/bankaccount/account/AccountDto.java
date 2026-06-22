@@ -1,6 +1,7 @@
 package io.github.kirillvarn.bankaccount.account;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 import io.github.kirillvarn.bankaccount.exchange.Exchange;
 import jakarta.persistence.EnumType;
@@ -19,6 +20,8 @@ public class AccountDto {
     @NotNull
     @Enumerated(EnumType.STRING)
     private Exchange.Currency currency;
+
+    private UUID id;
     private Boolean isPrimary;
     private String name;
     private BigDecimal balance;
