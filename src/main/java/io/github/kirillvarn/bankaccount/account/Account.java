@@ -33,6 +33,9 @@ public class Account {
     @Column(nullable = false, length = 3)
     private Exchange.Currency currency;
 
+    private Boolean isPrimary;
+    private String name;
+
     private BigDecimal balance;
 
     @CreationTimestamp

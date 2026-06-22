@@ -18,6 +18,8 @@ CREATE TABLE accounts (
   id UUID PRIMARY KEY,
   user_id UUID NOT NULL,
   currency VARCHAR(3) NOT NULL,
+  name varchar(32),
+  is_primary BOOLEAN,
   balance DECIMAL(19,4) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id),
@@ -37,6 +39,8 @@ CREATE TABLE account_transactions (
   CONSTRAINT fk_exch FOREIGN KEY (exchange_id) REFERENCES exchanges(id),
   CONSTRAINT fk_account FOREIGN KEY (account_id) REFERENCES accounts(id)
 );
+
+CREATE UNIQUE INDEX idx_unique_user_primary ON accounts (user_id, is_primary);
 
 insert into users (id, username, created_at) values ('123e4567-e89b-12d3-a456-426614174000', 'User 1', now());
 insert into users (id, username, created_at) values ('123e4567-e89b-12d3-a456-426614174001', 'User 2', now());

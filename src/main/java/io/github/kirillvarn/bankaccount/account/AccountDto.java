@@ -19,5 +19,7 @@ public class AccountDto {
     @NotNull
     @Enumerated(EnumType.STRING)
     private Exchange.Currency currency;
+    private Boolean isPrimary;
+    private String name;
     private BigDecimal balance;
 }

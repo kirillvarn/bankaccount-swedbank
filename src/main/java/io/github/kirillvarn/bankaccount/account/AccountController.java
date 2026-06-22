@@ -45,10 +45,10 @@ public class AccountController {
     }
 
     @GetMapping
-    public List<AccountDto> getAll(@AuthenticationPrincipal Jwt jwt, @PathVariable UUID id) {
+    public List<AccountDto> getAll(@AuthenticationPrincipal Jwt jwt) {
         UUID userId = UUID.fromString(jwt.getClaim("user_id"));
 
-        List<Account> accounts = accountService.getAll(id, userId);
+        List<Account> accounts = accountService.getAll(userId);
 
         List<AccountDto> accDto = accounts.stream().map(mapper::mapTo).collect(Collectors.toList());
 

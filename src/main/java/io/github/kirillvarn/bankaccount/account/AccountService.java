@@ -1,5 +1,6 @@
 package io.github.kirillvarn.bankaccount.account;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -21,10 +22,6 @@ public class AccountService {
     }
 
     public Account create(Account account, UUID userId) {
-        // if (accountRepo.existsByUserIdAndCurrency(userId, account.getCurrency()).isPresent()) {
-        //     throw new ResponseStatusException(HttpStatus.CONFLICT);
-        // }
-
         User user = userRepo.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -35,6 +32,12 @@ public class AccountService {
     public Account getOne(UUID id, UUID userId) {
         Account acc = accountRepo.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
+
+        return acc;
+    }
+
+    public List<Account> getAll(UUID userId) {
+        List<Account> acc = accountRepo.findAllByUserId(userId);
 
         return acc;
     }
