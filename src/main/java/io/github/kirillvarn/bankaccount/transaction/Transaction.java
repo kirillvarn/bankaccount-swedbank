@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import io.github.kirillvarn.bankaccount.account.Account;
 import io.github.kirillvarn.bankaccount.exchange.Exchange;
+import io.github.kirillvarn.bankaccount.transaction.Transaction.TransactionType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name="account_transactions")
 public class Transaction {
-    public enum TranscationType { DEB, ADD };
+    public enum TransactionType { DEB, ADD };
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -31,15 +32,15 @@ public class Transaction {
     @JoinColumn(name = "account_id")
     private Account account;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "exchange_id")
+    private Exchange exchange;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 3)
-    private TranscationType transactionType;
+    private TransactionType transactionType;
 
     private BigDecimal amount;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 3)
-    private Exchange.Currency currency;
 
     private BigDecimal balanceBefore;
 

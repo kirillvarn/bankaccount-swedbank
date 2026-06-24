@@ -36,6 +36,7 @@ public class Account {
     private Exchange.Currency currency;
 
     private Boolean isPrimary;
+
     private String name;
 
     private BigDecimal balance;

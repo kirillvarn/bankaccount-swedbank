@@ -28,9 +28,8 @@ public class TestDataUtil {
     public static Transaction createTransaction(Account acc) {
         return Transaction.builder()
                 .account(acc)
-                .transactionType(Transaction.TranscationType.ADD)
+                .transactionType(Transaction.TransactionType.ADD)
                 .amount(new BigDecimal(10))
-                .currency(Exchange.Currency.USD)
                 .balanceBefore(new BigDecimal(100))
                 .balanceAfter(new BigDecimal(110))
                 .build();

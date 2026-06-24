@@ -2,9 +2,10 @@ package io.github.kirillvarn.bankaccount.transaction;
 
 import java.math.BigDecimal;
 import java.util.UUID;
+import java.sql.Timestamp;
 
-import io.github.kirillvarn.bankaccount.exchange.Exchange;
-import io.github.kirillvarn.bankaccount.transaction.Transaction.TranscationType;
+
+import io.github.kirillvarn.bankaccount.transaction.Transaction.TransactionType;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
@@ -23,11 +24,7 @@ public class TransactionDto {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private Exchange.Currency currency;
-
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    private TranscationType transactionType;
+    private TransactionType transactionType;
 
     @NotNull
     private BigDecimal amount;
@@ -38,4 +35,6 @@ public class TransactionDto {
     private BigDecimal balanceBefore;
 
     private BigDecimal balanceAfter;
+
+    private Timestamp createdAt;
 }

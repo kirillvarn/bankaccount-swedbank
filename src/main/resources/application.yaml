@@ -1,6 +1,6 @@
 app:
   seed:
-    enabled: false
+    enabled: true
     users: 2
     accountsPerUser: 3
 

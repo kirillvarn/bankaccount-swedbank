@@ -6,7 +6,10 @@ import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import io.github.kirillvarn.bankaccount.account.Account;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,19 +34,20 @@ public class Exchange {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 3)
-    private Currency fromCurrency;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "to_account_id")
+    private Account toAccount;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 3)
-    private Currency toCurrency;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "from_account_id")
+    private Account fromAccount;
 
+    @NotNull
     private BigDecimal exchangeRate;
 
-    private BigDecimal balanceBefore;
-
-    private BigDecimal balanceAfter;
+    @NotNull
+    @Positive
+    private BigDecimal amount;
 
     @CreationTimestamp
     @Column(updatable = false, nullable = false)
