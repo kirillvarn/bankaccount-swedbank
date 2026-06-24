@@ -19,9 +19,12 @@ import lombok.NoArgsConstructor;
 @Builder
 public class TransactionDto {
     @NotNull
+    private UUID id;
+
+    @NotNull
     @Enumerated(EnumType.STRING)
     private Exchange.Currency currency;
-    
+
     @NotNull
     @Enumerated(EnumType.STRING)
     private TranscationType transactionType;

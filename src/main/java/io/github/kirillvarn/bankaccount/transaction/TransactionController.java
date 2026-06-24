@@ -1,5 +1,6 @@
 package io.github.kirillvarn.bankaccount.transaction;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,4 +31,15 @@ public class TransactionController {
         Transaction saved = transactionService.create(transaction, userId);
         return mapper.mapTo(saved);
     };
+
+    @GetMapping("/{id}")
+    public TransactionDto getOne(@PathVariable UUID id) {
+        Optional<Transaction> transaction = transactionService.getOne(id);
+
+        if (!transaction.isPresent()) return null;
+
+        TransactionDto transactionDto = mapper.mapTo(transaction.get());
+
+        return transactionDto;
+    }
 }
