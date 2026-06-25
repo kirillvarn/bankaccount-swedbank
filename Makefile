@@ -1,5 +1,2 @@
-run:
-	./mvnw spring-boot:run
-
-tests:
-	mvnw clean && mvnw test
+build:
+	mvnw clean package -DskipTests && docker compose up --build --force-recreate

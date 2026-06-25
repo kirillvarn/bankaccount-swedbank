@@ -14,7 +14,7 @@ public class TestDataUtil {
     public static Account createAccount(User user) {
         return Account.builder()
                 .currency(Exchange.Currency.USD)
-                .balance(new BigDecimal(100))
+                .balance(new BigDecimal(1000))
                 .user(user)
                 .build();
     }

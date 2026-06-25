@@ -1,7 +1,7 @@
 package io.github.kirillvarn.bankaccount.account;
 
+import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
@@ -21,23 +21,33 @@ public class AccountService {
         this.userRepo = userRepo;
     }
 
-    public Account create(Account account, UUID userId) {
-        User user = userRepo.findById(userId)
+    public Account create(Account account, String userName) {
+        User user = userRepo.findByUsername(userName)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (account.getBalance() == null) {
+            account.setBalance(BigDecimal.ZERO);
+        }
+
+        boolean hasAccounts = accountRepo.existsByUser(user);
+
+        if (!hasAccounts) {
+            account.setIsPrimary(true);
+        }
 
         account.setUser(user);
         return accountRepo.save(account);
     }
 
-    public Account getOne(UUID id, UUID userId) {
-        Account acc = accountRepo.findByIdAndUserId(id, userId)
+    public Account getOne(UUID id, String userName) {
+        Account acc = accountRepo.findByIdAndUserUsername(id, userName)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
 
         return acc;
     }
 
-    public List<Account> getAll(UUID userId) {
-        List<Account> acc = accountRepo.findAllByUserId(userId);
+    public List<Account> getAll(String userName) {
+        List<Account> acc = accountRepo.findAllByUserUsername(userName);
 
         return acc;
     }

@@ -39,8 +39,6 @@ CREATE TABLE account_transactions (
   CONSTRAINT fk_account FOREIGN KEY (account_id) REFERENCES accounts(id)
 );
 
-
-
 CREATE UNIQUE INDEX one_primary_per_user
 ON accounts (user_id)
 WHERE is_primary = true;

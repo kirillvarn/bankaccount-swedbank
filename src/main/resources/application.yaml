@@ -1,8 +1,8 @@
 app:
   seed:
-    enabled: true
-    users: 2
-    accountsPerUser: 3
+    enabled: false
+    users: 1
+    accountsPerUser: 0
 
 rsa:
   private-key: classpath:certs/private.pem

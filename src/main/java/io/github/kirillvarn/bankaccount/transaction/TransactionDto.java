@@ -19,10 +19,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class TransactionDto {
-    @NotNull
     private UUID id;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
 

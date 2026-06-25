@@ -1,33 +1,9 @@
-## Public API 
+# Starting the application
 
 
-GET  /api/v1/accounts/{id}  
+```bash
+$ make build
 ```
-body: {}  
-params: { id: UUID }
-```
+Builds the docker image and start docker compose services.
 
-GET  /api/v1/accounts/{id}/transactions  
-```
-body: {}  
-params: { id: UUID }
-```
-
-POST /api/v1/transactions  
-```
-body: {
-    type: TransactionType
-    amount: BigDecimal
-    accountId: String
-}
-```
-
-POST /api/v1/exchanges  
-```
-body: {
-    from: Currency  
-    to: Currency
-    accountId: String
-    amount: BigDecimal
-}
-```
+Rename example.env -> .env before building.

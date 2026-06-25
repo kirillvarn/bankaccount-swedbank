@@ -1,11 +1,9 @@
 package io.github.kirillvarn.bankaccount.account;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
@@ -24,27 +22,27 @@ public class AccountController {
     private Mapper<Account, AccountDto> mapper;
     private Mapper<Transaction, TransactionDto> transactionMapper;
 
-    @Autowired
-    public AccountController(Mapper<Transaction, TransactionDto> transactionMapper, TransactionService transactionService, AccountService accountService, Mapper<Account, AccountDto> mapper) {
+    public AccountController(Mapper<Transaction, TransactionDto> transactionMapper,
+            TransactionService transactionService, AccountService accountService, Mapper<Account, AccountDto> mapper) {
         this.accountService = accountService;
         this.transactionMapper = transactionMapper;
         this.transactionService = transactionService;
         this.mapper = mapper;
-    };
+    }
 
     @PostMapping
     public AccountDto create(@AuthenticationPrincipal Jwt jwt, @RequestBody AccountDto accountDto) {
         Account acc = mapper.mapFrom(accountDto);
-        UUID userId = UUID.fromString(jwt.getClaim("user_id"));
-        Account saved = accountService.create(acc, userId);
+        String userName = jwt.getClaim("user_id");
+        Account saved = accountService.create(acc, userName);
         return mapper.mapTo(saved);
     }
 
     @GetMapping("/{id}")
     public AccountDto getOne(@AuthenticationPrincipal Jwt jwt, @PathVariable UUID id) {
-        UUID userId = UUID.fromString(jwt.getClaim("user_id"));
+        String userName = jwt.getClaim("user_id");
 
-        Account account = accountService.getOne(id, userId);
+        Account account = accountService.getOne(id, userName);
 
         AccountDto accDto = mapper.mapTo(account);
 
@@ -53,9 +51,9 @@ public class AccountController {
 
     @GetMapping
     public List<AccountDto> getAll(@AuthenticationPrincipal Jwt jwt) {
-        UUID userId = UUID.fromString(jwt.getClaim("user_id"));
+        String userName = jwt.getClaim("user_id");
 
-        List<Account> accounts = accountService.getAll(userId);
+        List<Account> accounts = accountService.getAll(userName);
 
         List<AccountDto> accDto = accounts.stream().map(mapper::mapTo).collect(Collectors.toList());
 
@@ -63,13 +61,16 @@ public class AccountController {
     }
 
     @GetMapping("/{id}/transactions")
-    public List<TransactionDto> getTransaction(@AuthenticationPrincipal Jwt jwt, @PathVariable UUID id) {
-        UUID userId = UUID.fromString(jwt.getClaim("user_id"));
+    public List<TransactionDto> getTransaction(@AuthenticationPrincipal Jwt jwt, @PathVariable UUID id,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int limit) {
 
-        List<Transaction> accounts = transactionService.getByAccount(userId, id);
+        String userName = jwt.getClaim("user_id");
 
-        List<TransactionDto> accDto = accounts.stream().map(transactionMapper::mapTo).collect(Collectors.toList());
+        List<Transaction> transactions = transactionService.getByAccount(userName, id, page, limit);
 
-        return accDto;
+        List<TransactionDto> transactionDto = transactions.stream().map(transactionMapper::mapTo).collect(Collectors.toList());
+
+        return transactionDto;
     }
 }

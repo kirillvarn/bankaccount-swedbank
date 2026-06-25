@@ -8,7 +8,6 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import io.github.kirillvarn.bankaccount.account.Account;
 import io.github.kirillvarn.bankaccount.exchange.Exchange;
-import io.github.kirillvarn.bankaccount.transaction.Transaction.TransactionType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

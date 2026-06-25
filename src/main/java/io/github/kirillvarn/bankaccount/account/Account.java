@@ -11,10 +11,12 @@ import io.github.kirillvarn.bankaccount.exchange.Exchange;
 import io.github.kirillvarn.bankaccount.transaction.Transaction;
 import io.github.kirillvarn.bankaccount.user.User;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Builder.Default;
 
 @Data
 @Builder
@@ -39,7 +41,9 @@ public class Account {
 
     private String name;
 
-    private BigDecimal balance;
+    @PositiveOrZero
+    @Default
+    private BigDecimal balance = BigDecimal.ZERO;
 
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
     private Set<Transaction> transactions;

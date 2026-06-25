@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import io.github.kirillvarn.bankaccount.account.Account;
@@ -21,7 +24,7 @@ public class TransactionService {
     }
 
     @Transactional
-    public Transaction create(Transaction transaction, UUID userId) {
+    public Transaction create(Transaction transaction) {
         Account acc = accRepo.findById(transaction.getAccount().getId())
                 .orElseThrow(() -> new RuntimeException("Account not found"));
 
@@ -36,8 +39,9 @@ public class TransactionService {
         return transactionRepo.save(transaction);
     }
 
-    public List<Transaction> getByAccount(UUID userId, UUID accountId) {
-        return transactionRepo.findByUserIdAndAccountId(userId, accountId);
+    public List<Transaction> getByAccount(String userName, UUID accountId, int page, int limit) {
+        Pageable pageable = PageRequest.of(page, limit);
+        return transactionRepo.findByUserUsernameAndAccountId(userName, accountId, pageable);
     }
 
     public Optional<Transaction> getOne(UUID id) {
