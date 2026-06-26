@@ -65,7 +65,7 @@ class ExchangeIntegrationTests {
         assertThat(transactions)
             .extracting(Transaction::getAmount)
             .containsExactlyInAnyOrder(
-                new BigDecimal("-100.00"),
+                new BigDecimal("100.00"),
                 new BigDecimal("110.00")
             );
     }

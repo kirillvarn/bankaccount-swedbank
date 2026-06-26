@@ -33,7 +33,7 @@ public class MoneyExchangeService {
         BigDecimal fromBase = DEFAULT_RATES.get(fromCurrency);
         BigDecimal toBase = DEFAULT_RATES.get(toCurreny);
 
-        BigDecimal rate = fromBase.divide(toBase, 10, RoundingMode.HALF_UP);
+        BigDecimal rate = toBase.divide(fromBase, 10, RoundingMode.HALF_UP);
         BigDecimal convertedAmount = amount.multiply(rate).setScale(2, RoundingMode.HALF_UP);
 
         return new ExchangeResult(rate, convertedAmount);

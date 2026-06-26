@@ -41,7 +41,7 @@ public class Account {
 
     private String name;
 
-    @PositiveOrZero
+    @PositiveOrZero(message = "Not enough funds")
     @Default
     private BigDecimal balance = BigDecimal.ZERO;
 

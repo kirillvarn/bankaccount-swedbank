@@ -69,7 +69,7 @@ public class TransactionRepositoryIntegrationTests {
 
         assertThat(result)
                 .hasSize(2)
-                .containsExactly(transaction2, transaction1);
+                .containsExactly(transaction1, transaction2);
     }
 
     @Test

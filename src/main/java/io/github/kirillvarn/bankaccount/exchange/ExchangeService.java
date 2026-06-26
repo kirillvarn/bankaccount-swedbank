@@ -35,14 +35,14 @@ public class ExchangeService {
 
         Exchange savedExchange = this.exchangeRepo.save(exchange);
 
-        Transaction add = Transaction.builder()
+        Transaction debit = Transaction.builder()
                 .account(from)
                 .exchange(savedExchange)
                 .transactionType(TransactionType.DEB)
-                .amount(amount.negate())
+                .amount(amount)
                 .build();
 
-        Transaction debit = Transaction.builder()
+        Transaction add = Transaction.builder()
                 .account(to)
                 .exchange(savedExchange)
                 .transactionType(TransactionType.ADD)

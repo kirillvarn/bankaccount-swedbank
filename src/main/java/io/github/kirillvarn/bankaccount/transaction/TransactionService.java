@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import io.github.kirillvarn.bankaccount.account.Account;
 import io.github.kirillvarn.bankaccount.account.AccountRepository;
+import io.github.kirillvarn.bankaccount.transaction.Transaction.TransactionType;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -28,7 +29,20 @@ public class TransactionService {
         Account acc = accRepo.findById(transaction.getAccount().getId())
                 .orElseThrow(() -> new RuntimeException("Account not found"));
 
-        BigDecimal newBalance = acc.getBalance().add(transaction.getAmount());
+        if (transaction.getAmount().compareTo(BigDecimal.ZERO) < 0)
+            throw new RuntimeException("Transaction amount should be positive");
+
+        BigDecimal deductibleAmount = transaction.getAmount();
+
+        if (transaction.getTransactionType() == TransactionType.DEB)
+            deductibleAmount = deductibleAmount.negate();
+
+        BigDecimal remainingBalance = acc.getBalance().add(deductibleAmount);
+
+        if (remainingBalance.compareTo(BigDecimal.ZERO) < 0)
+            throw new RuntimeException("Not enough funds");
+
+        BigDecimal newBalance = acc.getBalance().add(deductibleAmount);
         transaction.setAccount(acc);
         transaction.setId(null);
         transaction.setBalanceBefore(acc.getBalance());
@@ -45,7 +59,8 @@ public class TransactionService {
     }
 
     public Optional<Transaction> getOne(UUID id) {
-        if (id != null) return transactionRepo.findById(id);
+        if (id != null)
+            return transactionRepo.findById(id);
 
         return Optional.empty();
     }
